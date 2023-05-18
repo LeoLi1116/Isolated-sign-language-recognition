@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Processing and Prediction</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        const staticUrl = "{{ url_for('static', filename='') }}";
+
+        function updateOriginalVideo() {
+            const videoSelect = document.getElementById("video");
+            const originalVideo = document.getElementById("original_video");
+            const videoFile = videoSelect.value + ".mp4";
+
+            originalVideo.src = staticUrl + "videos/" + videoFile;
+            originalVideo.load();
+        }
+    </script>
+</head>
+<body>
+    <h1>Video Processing</h1>
+    <form action="/process" method="post">
+        <label for="video">Select Video:</label>
+        <select name="video" id="video" onchange="updateOriginalVideo()">
+            <option value="bye">bye</option>
+            <option value="cut">cut</option>
+            <option value="for">for</option>
+            <option value="see">see</option>
+            <option value="wait">wait</option>
+            <option value="white">white</option>
+            <!-- Add more options for additional models -->
+        </select>
+        
+        <label for="model">Select Model:</label>
+        <select name="model" id="model">
+            <option value="GRU">GRU</option>
+            <option value="LSTM">LSTM</option>
+            <option value="Transformer">Transformer</option>
+            <option value="Ensemble">Ensemble</option>
+            <!-- Add more options for additional models -->
+        </select>
+        
+        <button type="submit">Process Video</button>
+    </form>
+
+    <button onclick="window.location.href='/'">Reset</button>
+
+    <section>
+        <h2>Original Video</h2>
+        <video id="original_video" width="320" height="240" controls>
+            <source src="{{ url_for('static', filename='videos/' + video + '.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        
+        <h2>Processed Video</h2>
+        <video id="processed_video" width="320" height="240" controls>
+            <source src="{{ url_for('static', filename=processed_video_path) }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </section>
+
+    <section>
+        <h3>Prediction Results:</h3>
+        <p>{{ prediction_results }}</p>
+    </section>
+</body>
+</html>
